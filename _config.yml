@@ -1,6 +1,7 @@
 title: Diego Ximénez
 email: dximenez@ucm.es
 url: "https://dhanton.github.io"
+baseurl: ""
 description: "Game Programmer"
 
 collections:
