@@ -1,5 +1,5 @@
 ---
-date: 2022-02-17
+date: 2023-10-11
 title: "Total War: PHARAOH"
 subtitle: Creative Assembly - Tools Programmer
 image: /assets/img/game_credits/tw_pharaoh.jpg
