@@ -3,6 +3,7 @@ email: dximenez@ucm.es
 url: "https://dhanton.github.io"
 baseurl: ""
 description: "Game Programmer"
+timezone: UTC
 
 collections:
   projects:
