@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Resume
+permalink: /resume/
 ---
 ## Experience
 - **Age of Delirium (Game Programmer)** - Developed a "Twitch plays" multiplayer strategy game in C++, with support for 4+ streamers and thousands of concurrent players via Twitch chat.

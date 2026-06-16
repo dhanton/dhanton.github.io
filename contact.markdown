@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Contact
+permalink: /contact/
 ---
 I'm currently available for contract work and other job opportunities.
 
