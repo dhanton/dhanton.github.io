@@ -1,0 +1,21 @@
+title: Diego Ximénez
+email: dximenez@ucm.es
+url: "https://dhanton.github.io"
+description: "Game Programmer"
+
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+  game_credits:
+    output: false
+
+defaults:
+  - scope:
+      path: ""
+      type: projects
+    values:
+      layout: project
+
+plugins:
+  - jekyll-feed
