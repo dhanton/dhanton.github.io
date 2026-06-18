@@ -204,6 +204,14 @@ section.projects {
   margin-bottom: 0;
 }
 
+.preload-hint {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
 /* Project page */
 .project-page { max-width: 680px; }
 

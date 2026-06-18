@@ -17,6 +17,9 @@ I specialize in game programming, with a particular interest in gameplay, multip
         {% if project.gif %}data-gif="{{ project.gif | relative_url }}"{% endif %}
         style="background-image: url('{{ project.image | relative_url }}');
         {% if project.gif %}--gif-url: url('{{ project.gif | relative_url }}'){% endif %}">
+        {% if project.gif %}
+          <img src="{{ project.gif | relative_url }}" alt="" class="preload-hint" loading="eager">
+        {% endif %}
       </div>
       <div class="card-body">
         <h3>{{ project.title }} ({{ project.date | date: "%Y"}})</h3>
@@ -35,9 +38,7 @@ I specialize in game programming, with a particular interest in gameplay, multip
     {% for game in sorted_games %}
     <a href="{{ game.game_url }}" class="project-card" target="_blank" rel="noopener">
       <div class="card-media"
-        {% if game.gif %}data-gif="{{ game.gif | relative_url }}"{% endif %}
-        style="background-image: url('{{ game.image | relative_url }}');
-        {% if game.gif %}--gif-url: url('{{ game.gif | relative_url }}'){% endif %}">
+        style="background-image: url('{{ game.image | relative_url }}');">
       </div>
       <div class="card-body">
         <h3>{{ game.title }}</h3>
