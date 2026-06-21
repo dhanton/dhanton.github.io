@@ -37,13 +37,18 @@ Below are some of the most interesting technical aspect and decisions I had to m
 #### Multiplayer tech
 {: .blog-section-title}
 
-![Feature screenshot](/assets/img/projects/age_of_delirium/main.jpg){: .blog-section-image}
+![Age of Delirium 1](/assets/img/projects/age_of_delirium/main.jpg){: .blog-img loading="lazy"}
 
-Even though I had the original idea a couple years ago, and had made some early tests and prototypes, development started on April 2025. The game was made from scratch using C++, and took a little over a year. All the game and backend code (a little over 40 thousand lines) was written by myself.
+Choosing the right network model for a multiplayer game is very important (see [this article](https://mas-bandwidth.com/choosing-the-right-network-model-for-your-multiplayer-game/)). In *Age of Delirium*, there are potentially thousands and thousands of completely independent players, all controlled individually by different viewers. Since viewer commands come from Twitch chat, it made sense to use an authoritative server that reads Twitch chat, parses commands, and bundles them into "frame inputs". The game processes these frame inputs one by one to advance the game state in a deterministic fashion. Therefore, as a network model, the server needs only to send the inputs, instead of game state changes, and all clients can simulate the exact same game. This saves bandwidth and allows for thousands and even millions of entities.
 
-Even though I had the original idea a couple years ago, and had made some early tests and prototypes, development started on April 2025. The game was made from scratch using C++, and took a little over a year. All the game and backend code (a little over 40 thousand lines) was written by myself.
+In deterministic multiplayer games, if for whatever reason two clients start to diverge, the consequences can be catastrophic. Even if the divergence is insignificant at first, both clients can start to deviate more and more as time passes, eventually reaching a completely different state. To prevent this, I employed the following techniques:
+- The server is authoritative. Its game state is the ground truth and is always correct.
+- A checksum of a *partial* game state is calculated after every frame. For efficiency, only the most important data in the game state is used (e.g., health is included, but not a unit attack counter); errors in internal data will "bubble up" to external data, reaching the checksum eventually. Clients send their checksums to the server and, if a divergence is detected, the client asks the server for the entire game state.
+- Clients automatically speed up the simulation if they're falling behind the server. This can be caused by an unstable connection (dropped packets), or if the client is an older machine that is taking longer to calculate frames, or after receiving a full game state (which takes a couple seconds).
 
-![Feature screenshot](/assets/img/projects/age_of_delirium/main.jpg){: .blog-section-image}
+For Twitch integration, I used the [EventSub subscription API](https://dev.twitch.tv/docs/eventsub/){:target="_blank" rel="noopener"}. Since only the server needs to receive these events, and it always sits behind a public IP, the [Webook](https://dev.twitch.tv/docs/eventsub/handling-webhook-events/){:target="_blank" rel="noopener"} transport layer was the most appropriate.
+
+When the match starts, the server subscribes to all streamer's chats. This causes API events to be sent to the webhook for every new chat message; the server processes these into valid commands which are passed over to the game engine. The server can also write in all chats as a [chatbot](https://dev.twitch.tv/docs/chat/){:target="_blank" rel="noopener"} to inform viewers of in-game events, command errors, and cooldowns.
 
 {::nomarkdown}
 </div>
@@ -72,7 +77,14 @@ WIP
   Your browser does not support the video tag.
 </video>
 
-WIP
+The game world is procedurally generated from an initial seed, using a fully deterministic algorithm. It currently only generates "island-type" worlds, which have a single central land of mass, as well as some simmple geographic features spread throughout (such as lakes, forests, and deserts). Once a world size is choosen, the algorithm performs the following steps:
+- Two [simplex noise](https://en.wikipedia.org/wiki/Simplex_noise){:target="_blank" rel="noopener"} textures are generated: one for terrain elevation, and another for moisture. For every tile, both noise values are combined to choose the tile type (water, ground, mountain, desert, etc.).
+- All mountain tiles are iterated and, if close enough to lava tiles, become volcanos (giving nearby houses access to the *forge*).
+- Similarly, fresh water tiles that are part of the ocean surrounding the island become sea water (giving nearby houses access to the *sea fishery*).
+- A [fill algorithm](https://en.wikipedia.org/wiki/Flood_fill){:target="_blank" rel="noopener"} is used to calculate which tiles belong to the mainland. This is important because there might be smaller islands around the main one that are inaccessible; some gameplay systems (e.g., path finding) depend on this and need a quick way of inspecting whether or not a certain tile is in the mainland.
+- Trees and rocks are placed randomly using [cellular noise](https://en.wikipedia.org/wiki/Worley_noise){:target="_blank" rel="noopener"}. These are spread out in groups that are isolated from each other and have different number of elements.
+
+As a final post-processing step, a "chunk score" is calculated for different sections of the world. This is a number that tries to predict how good a section is based on its natural resources and other metrics. This is used to ensure starting player locations are balanced and have similar conditions (for example, that no one starts too far away from trees or rocks). It is also used to ensure players are not too close to each other at the start.
 
 {::nomarkdown}
 </div>
