@@ -37,9 +37,12 @@ Below are some of the most interesting technical aspect and decisions I had to m
 #### Multiplayer tech
 {: .blog-section-title}
 
-![Age of Delirium 1](/assets/img/projects/age_of_delirium/main.jpg){: .blog-img loading="lazy"}
+<video class="blog-img" autoplay loop muted playsinline>
+  <source src="{{ '/assets/img/projects/age_of_delirium/multiplayer_tech.webm' | relative_url }}" type="video/webm">
+  Your browser does not support the video tag.
+</video>
 
-Choosing the right network model for a multiplayer game is very important (see [this article](https://mas-bandwidth.com/choosing-the-right-network-model-for-your-multiplayer-game/)). In *Age of Delirium*, there are potentially thousands and thousands of completely independent players, all controlled individually by different viewers. Since viewer commands come from Twitch chat, it made sense to use an authoritative server that reads Twitch chat, parses commands, and bundles them into "frame inputs". The game processes these frame inputs one by one to advance the game state in a deterministic fashion. Therefore, as a network model, the server needs only to send the inputs, instead of game state changes, and all clients can simulate the exact same game. This saves bandwidth and allows for thousands and even millions of entities.
+Choosing the right network model for a multiplayer game is very important (see [this article](https://mas-bandwidth.com/choosing-the-right-network-model-for-your-multiplayer-game/){:target="_blank" rel="noopener"}). In *Age of Delirium*, there are potentially thousands and thousands of completely independent players, all controlled individually by different viewers. Since viewer commands come from Twitch chat, it made sense to use an authoritative server that reads Twitch chat, parses commands, and bundles them into "frame inputs". The game processes these frame inputs one by one to advance the game state in a deterministic fashion. Therefore, as a network model, the server needs only to send the inputs, instead of game state changes, and all clients can simulate the exact same game. This saves bandwidth and allows for thousands and even millions of entities.
 
 In deterministic multiplayer games, if for whatever reason two clients start to diverge, the consequences can be catastrophic. Even if the divergence is insignificant at first, both clients can start to deviate more and more as time passes, eventually reaching a completely different state. To prevent this, I employed the following techniques:
 - The server is authoritative. Its game state is the ground truth and is always correct.
@@ -59,6 +62,11 @@ When the match starts, the server subscribes to all streamer's chats. This cause
 {:/}
 #### Local simulation
 {: .blog-section-title}
+
+<video class="blog-img" autoplay loop muted playsinline>
+  <source src="{{ '/assets/img/projects/age_of_delirium/local_simulation.webm' | relative_url }}" type="video/webm">
+  Your browser does not support the video tag.
+</video>
 
 WIP
 

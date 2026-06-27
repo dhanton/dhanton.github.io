@@ -14,7 +14,7 @@ permalink: /age-of-delirium/
   Your browser does not support the video tag.
 </video>
 
-In it, different Twitch streamers play against each other in a shared world, where every member of their chats controls a different human.
+In *Age of Delirium*, different Twitch streamers play against each other in a shared world, where every member of their chats controls a different human.
 
 Viewers use chat commands to choose their class and move around. Together with their streamer, they must coordinate to explore the world, expand their civilization, collect resources, and conquer the others. In the end, only one streamer remains!
 
